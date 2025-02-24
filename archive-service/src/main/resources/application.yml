@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: archive-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: changeme
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 9097
+
+service:
+  weather:
+    baseurl: http://localhost:9090/weather/service
+
+logging:
+  level:
+    sql: debug
+    web: info
