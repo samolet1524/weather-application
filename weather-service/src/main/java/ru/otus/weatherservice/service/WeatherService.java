@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 import ru.otus.weatherservice.config.ApiMethodConfig;
 import ru.otus.weatherservice.config.ApiToken;
@@ -23,55 +24,50 @@ public class WeatherService {
 
     public Mono<RealTimeResponse> getCurrentWeather(String city) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(apiMethodConfig.getCurrentWeather())
-                        .queryParam("key", apiToken.getApiToken())
+                .uri(prepareUriComponents(apiMethodConfig.getCurrentWeather())
                         .queryParam("q", city)
-                        .build())
+                        .build()
+                        .toUri())
                 .retrieve()
                 .bodyToMono(RealTimeResponse.class);
     }
 
     public Mono<RealTimeResponse> getCurrentWeather(Double lat, Double lon) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(apiMethodConfig.getCurrentWeather())
-                        .queryParam("key", apiToken.getApiToken())
+                .uri(prepareUriComponents(apiMethodConfig.getCurrentWeather())
                         .queryParam("q", lat + "," + lon)
-                        .build())
+                        .build()
+                        .toUri())
                 .retrieve()
                 .bodyToMono(RealTimeResponse.class);
     }
 
     public Mono<RealTimeResponse> getCurrentWeatherByIp(String ip) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(apiMethodConfig.getCurrentWeather())
-                        .queryParam("key", apiToken.getApiToken())
+                .uri(prepareUriComponents(apiMethodConfig.getCurrentWeather())
                         .queryParam("q", ip)
-                        .build())
+                        .build()
+                        .toUri())
                 .retrieve()
                 .bodyToMono(RealTimeResponse.class);
     }
 
     public Mono<AstronomyResponse> getAstronomy(String city) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(apiMethodConfig.getAstronomy())
-                        .queryParam("key", apiToken.getApiToken())
+                .uri(prepareUriComponents(apiMethodConfig.getAstronomy())
                         .queryParam("q", city)
-                        .build())
+                        .build()
+                        .toUri())
                 .retrieve()
                 .bodyToMono(AstronomyResponse.class);
     }
 
     public Mono<AstronomyResponse> getAstronomy(Double lat, Double lon) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(apiMethodConfig.getAstronomy())
-                        .queryParam("key", apiToken.getApiToken())
+                .uri(prepareUriComponents(apiMethodConfig.getAstronomy())
                         .queryParam("q", lat + "," + lon)
-                        .build())
+                        .build()
+                        .toUri())
                 .retrieve()
                 .bodyToMono(AstronomyResponse.class);
     }
@@ -79,6 +75,13 @@ public class WeatherService {
     @Scheduled(fixedDelay = 300000)
     public void runJob() {
 
+    }
+
+    private UriComponentsBuilder prepareUriComponents(String method) {
+        return UriComponentsBuilder
+                .newInstance()
+                .path(method)
+                .queryParam("key", apiToken.getApiToken());
     }
 
 }
