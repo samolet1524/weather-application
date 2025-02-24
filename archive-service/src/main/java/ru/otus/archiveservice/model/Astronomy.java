@@ -19,7 +19,7 @@ import java.sql.Time;
 @Table(name = "astronomies")
 public class Astronomy {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "check_date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")

@@ -12,7 +12,7 @@ public interface WeatherPointMapper {
     @Mapping(target = "lastUpdated", source = "response.current.lastUpdated")
     @Mapping(target = "tempC", source = "response.current.tempC")
     @Mapping(target = "tempF", source = "response.current.tempF")
-    @Mapping(target = "condition", source = "response.current.condition")
+    @Mapping(target = "condition", source = "response.current.condition.text")
     @Mapping(target = "windDirection", source = "response.current.windDirection")
     @Mapping(target = "pressureMb", source = "response.current.pressureMb")
     @Mapping(target = "humidity", source = "response.current.humidity")

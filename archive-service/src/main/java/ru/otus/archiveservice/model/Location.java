@@ -22,7 +22,7 @@ import java.util.Set;
 public class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @OneToMany(mappedBy="location")
     Set<WeatherPoint> weatherPoints;

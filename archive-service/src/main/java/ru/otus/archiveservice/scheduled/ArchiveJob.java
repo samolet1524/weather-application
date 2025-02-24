@@ -3,9 +3,11 @@ package ru.otus.archiveservice.scheduled;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.otus.archiveservice.dto.AstronomyResponse;
@@ -19,6 +21,8 @@ import java.net.UnknownHostException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
+@Slf4j
+@Service
 public class ArchiveJob {
 
     final ArchiveService archiveService;
@@ -28,6 +32,7 @@ public class ArchiveJob {
 
     @Scheduled(fixedDelay = 300000)
     public void runGetWeatherPointJob() {
+        log.info("Start job to getting weather point");
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/real/{ip}")
                         .build(ipAddress))
@@ -35,9 +40,11 @@ public class ArchiveJob {
                 .bodyToMono(RealTimeResponse.class)
                 .flatMap(Mono::just)
                 .subscribe(archiveService::addWeatherPointToArchive);
+        log.info("Finish job to getting weather point");
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")
+//    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 25 23  * * ?")
     public void runGetAstronomyPointJob() {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/astronomy/{ip}")

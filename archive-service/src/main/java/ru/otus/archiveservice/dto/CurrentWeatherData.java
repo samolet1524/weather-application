@@ -33,7 +33,7 @@ public class CurrentWeatherData {
     /**
      * Weather condition as text
      */
-    String condition;
+    Condition condition;
     /**
      * Wind speed in kilometer per hour
      */
