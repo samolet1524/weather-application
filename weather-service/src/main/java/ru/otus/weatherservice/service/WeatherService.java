@@ -3,15 +3,15 @@ package ru.otus.weatherservice.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 import ru.otus.weatherservice.config.ApiMethodConfig;
 import ru.otus.weatherservice.config.ApiToken;
+import ru.otus.weatherservice.model.AstronomyAPIResponse;
 import ru.otus.weatherservice.model.AstronomyResponse;
 import ru.otus.weatherservice.model.RealTimeResponse;
+import ru.otus.weatherservice.util.AstronomyResponseMapper;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,67 +21,46 @@ public class WeatherService {
     WebClient webClient;
     ApiMethodConfig apiMethodConfig;
     ApiToken apiToken;
+    AstronomyResponseMapper astronomyResponseMapper;
 
-    public Mono<RealTimeResponse> getCurrentWeather(String city) {
+    public Mono<RealTimeResponse> getCurrentWeatherByCityOrIp(String city) {
         return webClient.get()
-                .uri(prepareUriComponents(apiMethodConfig.getCurrentWeather())
+                .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getCurrentWeather())
+                        .queryParam("key", apiToken.getApiToken())
                         .queryParam("q", city)
-                        .build()
-                        .toUri())
+                        .build())
                 .retrieve()
                 .bodyToMono(RealTimeResponse.class);
     }
 
     public Mono<RealTimeResponse> getCurrentWeather(Double lat, Double lon) {
         return webClient.get()
-                .uri(prepareUriComponents(apiMethodConfig.getCurrentWeather())
+                .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getCurrentWeather())
+                        .queryParam("key", apiToken.getApiToken())
                         .queryParam("q", lat + "," + lon)
-                        .build()
-                        .toUri())
+                        .build())
                 .retrieve()
                 .bodyToMono(RealTimeResponse.class);
     }
 
-    public Mono<RealTimeResponse> getCurrentWeatherByIp(String ip) {
+    public Mono<AstronomyResponse> getAstronomyByCityOrIp(String city) {
         return webClient.get()
-                .uri(prepareUriComponents(apiMethodConfig.getCurrentWeather())
-                        .queryParam("q", ip)
-                        .build()
-                        .toUri())
-                .retrieve()
-                .bodyToMono(RealTimeResponse.class);
-    }
-
-    public Mono<AstronomyResponse> getAstronomy(String city) {
-        return webClient.get()
-                .uri(prepareUriComponents(apiMethodConfig.getAstronomy())
+                .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getAstronomy())
+                        .queryParam("key", apiToken.getApiToken())
                         .queryParam("q", city)
-                        .build()
-                        .toUri())
+                        .build())
                 .retrieve()
-                .bodyToMono(AstronomyResponse.class);
+                .bodyToMono(AstronomyAPIResponse.class)
+                .map(astronomyResponseMapper::toAstronomyResponse);
     }
 
     public Mono<AstronomyResponse> getAstronomy(Double lat, Double lon) {
         return webClient.get()
-                .uri(prepareUriComponents(apiMethodConfig.getAstronomy())
+                .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getAstronomy())
+                        .queryParam("key", apiToken.getApiToken())
                         .queryParam("q", lat + "," + lon)
-                        .build()
-                        .toUri())
+                        .build())
                 .retrieve()
                 .bodyToMono(AstronomyResponse.class);
     }
-
-    @Scheduled(fixedDelay = 300000)
-    public void runJob() {
-
-    }
-
-    private UriComponentsBuilder prepareUriComponents(String method) {
-        return UriComponentsBuilder
-                .newInstance()
-                .path(method)
-                .queryParam("key", apiToken.getApiToken());
-    }
-
 }

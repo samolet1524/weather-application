@@ -15,9 +15,9 @@ import lombok.experimental.FieldDefaults;
 @ToString
 public class RealTimeResponse {
     /**
-     * {@link Location}
+     * {@link LocationDto}
      */
-    Location location;
+    LocationDto location;
     /**
      * {@link CurrentWeatherData}
      */

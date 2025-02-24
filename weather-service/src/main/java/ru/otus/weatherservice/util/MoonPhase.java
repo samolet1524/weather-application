@@ -1,5 +1,7 @@
 package ru.otus.weatherservice.util;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * {@code MoonPhases} describes moon phase.
  */
@@ -17,5 +19,19 @@ public enum MoonPhase {
 
     MoonPhase(String name) {
         this.name = name;
+    }
+
+    @JsonCreator
+    public static MoonPhase getItem(String name) {
+        for (MoonPhase aip : values()) {
+            if (aip.getValue().equals(name)) {
+                return aip;
+            }
+        }
+        return null;
+    }
+
+    public String getValue() {
+        return name;
     }
 }

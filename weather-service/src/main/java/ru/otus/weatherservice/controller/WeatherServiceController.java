@@ -3,10 +3,7 @@ package ru.otus.weatherservice.controller;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import ru.otus.weatherservice.model.AstronomyResponse;
 import ru.otus.weatherservice.model.RealTimeResponse;
@@ -22,7 +19,7 @@ public class WeatherServiceController {
 
     @GetMapping("real/city")
     public Mono<RealTimeResponse> getCurrentWeatherByCity(@RequestParam(value = "city") String city) {
-        return weatherService.getCurrentWeather(city);
+        return weatherService.getCurrentWeatherByCityOrIp(city);
     }
 
     @GetMapping("real/coordinates")
@@ -37,6 +34,16 @@ public class WeatherServiceController {
 
     @GetMapping("astronomy/city")
     public Mono<AstronomyResponse> getAstronomyByCity(@RequestParam(value = "city") String city) {
-        return weatherService.getAstronomy(city);
+        return weatherService.getAstronomyByCityOrIp(city);
+    }
+
+    @GetMapping("real/{ip}")
+    public Mono<RealTimeResponse> getCurrentWeatherByIp(@PathVariable String ip) {
+        return weatherService.getCurrentWeatherByCityOrIp(ip);
+    }
+
+    @GetMapping("astronomy/{ip}")
+    public Mono<AstronomyResponse> getAstronomyByIp(@PathVariable String ip) {
+        return weatherService.getAstronomyByCityOrIp(ip);
     }
 }

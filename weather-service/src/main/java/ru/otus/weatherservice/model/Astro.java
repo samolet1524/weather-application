@@ -1,4 +1,4 @@
-package ru.otus.archiveservice.dto;
+package ru.otus.weatherservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -6,13 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import ru.otus.archiveservice.model.MoonPhase;
+import ru.otus.weatherservice.util.MoonPhase;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class Astronomy {
+public class Astro {
     /**
      * Sunrise time
      */

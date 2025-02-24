@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class Location {
+public class LocationDto {
 
     /**
      * Location name

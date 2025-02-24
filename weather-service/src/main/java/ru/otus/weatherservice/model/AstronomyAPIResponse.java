@@ -1,4 +1,4 @@
-package ru.otus.archiveservice.dto;
+package ru.otus.weatherservice.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,13 +13,13 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class AstronomyResponse {
+public class AstronomyAPIResponse {
     /**
-     * {@link LocationDto}
+     * {@link Location}
      */
-    LocationDto location;
+    Location location;
     /**
-     * {@link AstronomyDto}
+     * {@link Astronomy}
      */
-    AstronomyDto astronomy;
+    ApiAstronomy astronomy;
 }
