@@ -7,19 +7,19 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 /**
- * {@code RealTimeResponse} describes API real time weather response data
+ * {@code AstronomyResponse} describes API astronomy response data
  */
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class RealTimeResponse {
+public class AstronomyResponse {
     /**
      * {@link Location}
      */
     Location location;
     /**
-     * {@link CurrentWeatherData}
+     * {@link Astronomy}
      */
-    CurrentWeatherData current;
+    Astronomy astronomy;
 }

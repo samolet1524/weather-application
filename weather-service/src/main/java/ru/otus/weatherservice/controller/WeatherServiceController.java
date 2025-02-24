@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import ru.otus.weatherservice.model.AstronomyResponse;
 import ru.otus.weatherservice.model.RealTimeResponse;
 import ru.otus.weatherservice.service.WeatherService;
 
@@ -18,12 +19,24 @@ import ru.otus.weatherservice.service.WeatherService;
 public class WeatherServiceController {
 
     WeatherService weatherService;
-    @GetMapping("city")
+
+    @GetMapping("real/city")
     public Mono<RealTimeResponse> getCurrentWeatherByCity(@RequestParam(value = "city") String city) {
         return weatherService.getCurrentWeather(city);
     }
-    @GetMapping("coordinates")
+
+    @GetMapping("real/coordinates")
     public Mono<RealTimeResponse> getCurrentWeatherByCoordinates(@RequestParam(value = "lat") Double lat, @RequestParam(value = "lon") Double lon) {
         return weatherService.getCurrentWeather(lat, lon);
+    }
+
+    @GetMapping("astronomy/coordinates")
+    public Mono<AstronomyResponse> getAstronomyByCoordinates(@RequestParam(value = "lat") Double lat, @RequestParam(value = "lon") Double lon) {
+        return weatherService.getAstronomy(lat, lon);
+    }
+
+    @GetMapping("astronomy/city")
+    public Mono<AstronomyResponse> getAstronomyByCity(@RequestParam(value = "city") String city) {
+        return weatherService.getAstronomy(city);
     }
 }
