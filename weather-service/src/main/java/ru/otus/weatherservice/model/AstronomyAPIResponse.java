@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import ru.otus.model.location.Location;
 
 /**
  * {@code AstronomyResponse} describes API astronomy response data
@@ -19,7 +20,7 @@ public class AstronomyAPIResponse {
      */
     Location location;
     /**
-     * {@link Astronomy}
+     * {@link ApiAstronomy}
      */
     ApiAstronomy astronomy;
 }

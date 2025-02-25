@@ -6,11 +6,11 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import ru.otus.model.astronomy.AstronomyResponse;
+import ru.otus.model.weather.RealTimeResponse;
 import ru.otus.weatherservice.config.ApiMethodConfig;
 import ru.otus.weatherservice.config.ApiToken;
 import ru.otus.weatherservice.model.AstronomyAPIResponse;
-import ru.otus.weatherservice.model.AstronomyResponse;
-import ru.otus.weatherservice.model.RealTimeResponse;
 import ru.otus.weatherservice.util.AstronomyResponseMapper;
 
 @Service

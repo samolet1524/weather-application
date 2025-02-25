@@ -1,4 +1,4 @@
-package ru.otus.weatherservice.model;
+package ru.otus.model.astronomy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import ru.otus.weatherservice.util.MoonPhase;
 
 @Getter
 @Setter

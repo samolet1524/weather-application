@@ -3,8 +3,8 @@ package ru.otus.weatherservice.util;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import ru.otus.model.astronomy.Astronomy;
 import ru.otus.weatherservice.model.Astro;
-import ru.otus.weatherservice.model.Astronomy;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

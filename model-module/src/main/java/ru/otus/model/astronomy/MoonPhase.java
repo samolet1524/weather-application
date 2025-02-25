@@ -1,4 +1,4 @@
-package ru.otus.weatherservice.util;
+package ru.otus.model.astronomy;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

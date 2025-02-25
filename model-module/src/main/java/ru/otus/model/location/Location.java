@@ -1,4 +1,4 @@
-package ru.otus.weatherservice.model;
+package ru.otus.model.location;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;

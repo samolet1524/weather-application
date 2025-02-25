@@ -44,7 +44,7 @@ public class ArchiveJob {
     }
 
 //    @Scheduled(cron = "0 0 1 * * ?")
-    @Scheduled(cron = "0 25 23  * * ?")
+    @Scheduled(cron = "0 03 21  * * ?")
     public void runGetAstronomyPointJob() {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/astronomy/{ip}")
@@ -59,7 +59,7 @@ public class ArchiveJob {
     private void onApplicationEvent(ContextRefreshedEvent event) {
         try (final DatagramSocket datagramSocket = new DatagramSocket()) {
             datagramSocket.connect(InetAddress.getByName("8.8.8.8"), 12345);
-            ipAddress = datagramSocket.getLocalAddress().getHostAddress();
+            ipAddress = "212.202.11.111";
         } catch (UnknownHostException | SocketException e) {
             throw new RuntimeException(e);
         }

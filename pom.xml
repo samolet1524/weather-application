@@ -16,10 +16,10 @@
     </properties>
 
     <modules>
+        <module>model-module</module>
         <module>archive-service</module>
-        <module>weather-service</module>
         <module>front-api</module>
-        <module>statistic-service</module>
+        <module>weather-service</module>
     </modules>
 
 </project>

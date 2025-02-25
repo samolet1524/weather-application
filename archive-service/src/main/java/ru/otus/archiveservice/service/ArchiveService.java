@@ -15,6 +15,8 @@ import ru.otus.archiveservice.repository.AstronomyRepository;
 import ru.otus.archiveservice.repository.LocationRepository;
 import ru.otus.archiveservice.repository.WeatherPointRepository;
 
+import java.time.Duration;
+
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class ArchiveService {
     AstronomyMapper astronomyMapper;
     WeatherPointMapper weatherPointMapper;
     LocationMapper locationMapper;
+    CustomMetricsService metricsService;
 
 
     public void addWeatherPointToArchive(RealTimeResponse response) {
@@ -35,6 +38,8 @@ public class ArchiveService {
                 .ifPresentOrElse(weatherPoint::setLocation,
                         () -> weatherPoint.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         weatherPointRepository.save(weatherPoint);
+        metricsService.getSummaryTemperature().record(weatherPoint.getTempC());
+        metricsService.getSummaryHumidity().record(weatherPoint.getHumidity());
     }
 
     public void addAstronomyPointToArchive(AstronomyResponse response) {
@@ -43,5 +48,6 @@ public class ArchiveService {
                 .ifPresentOrElse(astronomy::setLocation,
                         () -> astronomy.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         astronomyRepository.save(astronomy);
+        metricsService.getSummaryDayLength().record(Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
     }
 }

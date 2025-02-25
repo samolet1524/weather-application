@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import ru.otus.weatherservice.util.MoonPhase;
+import ru.otus.model.astronomy.MoonPhase;
 
 @Getter
 @Setter
