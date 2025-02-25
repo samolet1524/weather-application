@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 import java.util.Set;
 
 /**
- * {@code Location} describes the matched location for which the information has been returned.
+ * {@code Location} describes the location for which the information is stored in the database.
  */
 @Getter
 @Setter
@@ -21,9 +21,13 @@ import java.util.Set;
 @Table(name = "locations")
 public class Location {
 
+    /**
+     * Auto generated primary key
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     @OneToMany(mappedBy="location")
     Set<WeatherPoint> weatherPoints;
     /**

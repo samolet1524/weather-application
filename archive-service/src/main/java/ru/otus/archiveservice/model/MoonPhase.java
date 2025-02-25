@@ -1,7 +1,7 @@
 package ru.otus.archiveservice.model;
 
 /**
- * {@code MoonPhases} describes moon phase.
+ * {@code MoonPhases} describes existing moon phases.
  */
 public enum MoonPhase {
     NEW_MOON,
@@ -11,6 +11,6 @@ public enum MoonPhase {
     FULL_MOON,
     WANING_GIBBOUS,
     LAST_QUARTER,
-    WANING_CRESCENT;
+    WANING_CRESCENT
 
 }
