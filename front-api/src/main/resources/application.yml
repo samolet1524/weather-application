@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: front-api
+
+server:
+  port: 8080
+
+service:
+  url: http://localhost:9090/weather/service
+
+management:
+  endpoint:
+    metrics:
+      access: unrestricted
+    health:
+      access: unrestricted
+    prometheus:
+      access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: info,prometheus
