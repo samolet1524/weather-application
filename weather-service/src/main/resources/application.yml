@@ -1,15 +1,27 @@
 spring:
   application:
     name: weather-service
+
 server:
   port: 9090
-
 
 api:
   key: changeme
   base-url: http://api.weatherapi.com/v1
   method:
     current-weather: /current.json
-    forecast: /forecast.json
     astronomy: /astronomy.json
+
+management:
+  endpoint:
+    metrics:
+      access: unrestricted
+    health:
+      access: unrestricted
+    prometheus:
+      access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: info,prometheus
 
