@@ -1,35 +1,23 @@
-package ru.otus.archiveservice.model;
+package ru.otus.model.location;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
+import java.time.LocalDateTime;
 
 /**
- * {@code Location} describes the location for which the information is stored in the database.
+ * {@code Location} describes the matched location for which the information has been returned.
  */
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-@Entity
-@Table(name = "locations")
 public class Location {
 
-    /**
-     * Auto generated primary key
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @OneToMany(mappedBy="location")
-    Set<WeatherPoint> weatherPoints;
     /**
      * Location name
      */
@@ -53,6 +41,11 @@ public class Location {
     /**
      * Time zone name
      */
-    @JsonProperty("time_zone")
+    @JsonProperty("tz_id")
     String timezone;
+    /**
+     * Local date and time
+     */
+    LocalDateTime localTime;
+
 }

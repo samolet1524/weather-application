@@ -2,8 +2,8 @@ package ru.otus.weatherservice.util;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.otus.model.astronomy.AstronomyResponse;
 import ru.otus.weatherservice.model.AstronomyAPIResponse;
-import ru.otus.weatherservice.model.AstronomyResponse;
 
 @Mapper(componentModel = "spring", uses = AstronomyDataMapper.class)
 public interface AstronomyResponseMapper {

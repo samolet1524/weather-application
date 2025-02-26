@@ -18,6 +18,19 @@ service:
   weather:
     baseurl: http://localhost:9090/weather/service
 
+management:
+  endpoint:
+    metrics:
+      access: unrestricted
+    health:
+     access: unrestricted
+    prometheus:
+     access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: info,prometheus
+
 logging:
   level:
     sql: debug

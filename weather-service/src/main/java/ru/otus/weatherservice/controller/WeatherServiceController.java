@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import ru.otus.weatherservice.model.AstronomyResponse;
-import ru.otus.weatherservice.model.RealTimeResponse;
+import ru.otus.model.astronomy.AstronomyResponse;
+import ru.otus.model.weather.RealTimeResponse;
 import ru.otus.weatherservice.service.WeatherService;
 
 @RestController

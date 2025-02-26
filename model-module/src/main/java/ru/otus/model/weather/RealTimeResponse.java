@@ -1,4 +1,4 @@
-package ru.otus.weatherservice.model;
+package ru.otus.model.weather;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,19 +8,19 @@ import lombok.experimental.FieldDefaults;
 import ru.otus.model.location.Location;
 
 /**
- * {@code AstronomyResponse} describes API astronomy response data
+ * {@code RealTimeResponse} describes API real time weather response data
  */
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class AstronomyAPIResponse {
+public class RealTimeResponse {
     /**
      * {@link Location}
      */
     Location location;
     /**
-     * {@link ApiAstronomy}
+     * {@link CurrentWeatherData}
      */
-    ApiAstronomy astronomy;
+    CurrentWeatherData current;
 }

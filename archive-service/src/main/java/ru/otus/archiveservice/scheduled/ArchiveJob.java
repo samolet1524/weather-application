@@ -10,15 +10,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.otus.archiveservice.dto.AstronomyResponse;
-import ru.otus.archiveservice.dto.RealTimeResponse;
 import ru.otus.archiveservice.service.ArchiveService;
+import ru.otus.model.astronomy.AstronomyResponse;
+import ru.otus.model.weather.RealTimeResponse;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+/**
+ * {@code ArchiveJob} contains periodic tasks
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Slf4j
@@ -30,6 +33,11 @@ public class ArchiveJob {
 
     private String ipAddress;
 
+    /**
+     * Calls the {@code weather-service} to get current weather information for the application host location
+     * with a fixed period between the end of the last invocation and the start of the next. Received weather
+     * information will be saved in the database.
+     */
     @Scheduled(fixedDelay = 300000)
     public void runGetWeatherPointJob() {
         log.info("Start job to getting weather point");
@@ -43,8 +51,14 @@ public class ArchiveJob {
         log.info("Finish job to getting weather point");
     }
 
-//    @Scheduled(cron = "0 0 1 * * ?")
-    @Scheduled(cron = "0 25 23  * * ?")
+    /**
+     * Calls the {@code weather-service} to get up-to-date information for sunrise, sunset, moonrise, moonset, moon phase
+     * for the application host location
+     * with a fixed period between the end of the last invocation and the start of the next. Received information
+     * will be saved in the database.
+     */
+    //    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 03 21  * * ?")
     public void runGetAstronomyPointJob() {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/astronomy/{ip}")
@@ -59,7 +73,7 @@ public class ArchiveJob {
     private void onApplicationEvent(ContextRefreshedEvent event) {
         try (final DatagramSocket datagramSocket = new DatagramSocket()) {
             datagramSocket.connect(InetAddress.getByName("8.8.8.8"), 12345);
-            ipAddress = datagramSocket.getLocalAddress().getHostAddress();
+            ipAddress = "212.202.11.111";
         } catch (UnknownHostException | SocketException e) {
             throw new RuntimeException(e);
         }

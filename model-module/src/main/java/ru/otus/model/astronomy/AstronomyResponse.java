@@ -1,4 +1,4 @@
-package ru.otus.weatherservice.model;
+package ru.otus.model.astronomy;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,13 +14,13 @@ import ru.otus.model.location.Location;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class AstronomyAPIResponse {
+public class AstronomyResponse {
     /**
      * {@link Location}
      */
     Location location;
     /**
-     * {@link ApiAstronomy}
+     * {@link Astronomy}
      */
-    ApiAstronomy astronomy;
+    Astronomy astronomy;
 }
