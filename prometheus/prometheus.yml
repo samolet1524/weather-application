@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+scrape_configs:
+  -   job_name: "weatherservice"
+      metrics_path: /actuator/prometheus
+      static_configs:
+        - targets: [weatherservice:9890]
+  -   job_name: "archiveservice"
+      metrics_path: /actuator/prometheus
+      static_configs:
+        - targets: [archiveservice:9097]
+  -   job_name: "frontapiservice"
+      metrics_path: /actuator/prometheus
+      static_configs:
+        - targets: [frontapiservice:8080]

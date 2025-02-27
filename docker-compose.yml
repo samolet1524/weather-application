@@ -1,0 +1,59 @@
+version: '3.1'
+services:
+  weatherservice:
+    build: weather-service
+    container_name: weatherservice
+    ports:
+      - "9890:9890"
+  databaseservice:
+    image: 'postgres:14-alpine'
+    container_name: databaseservice
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  archiveservice:
+    build: archive-service
+    container_name: archiveservice
+    ports:
+      - "9097:9097"
+    depends_on:
+      - databaseservice
+      - weatherservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://databaseservice:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+  frontapiservice:
+    build: front-api
+    container_name: frontapiservice
+    ports:
+      - "8080:8080"
+    depends_on:
+      - weatherservice
+  prometheus:
+    image: prom/prometheus
+    depends_on:
+      - weatherservice
+      - archiveservice
+      - frontapiservice
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
+    hostname: prometheus
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
+    restart: always
