@@ -7,6 +7,8 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.otus.model.location.Location;
 
+import java.util.Date;
+
 /**
  * {@code AstronomyResponse} describes API astronomy response data
  */
@@ -23,4 +25,8 @@ public class AstronomyResponse {
      * {@link Astronomy}
      */
     Astronomy astronomy;
+    /**
+     * For internal usage
+     */
+    Date lastUpdated;
 }

@@ -65,6 +65,6 @@ public class ArchiveService {
                 .ifPresentOrElse(astronomy::setLocation,
                         () -> astronomy.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         astronomyRepository.save(astronomy);
-        metricsService.registerAstronomy(DATE_FORMAT.format(astronomy.getDate()), Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
+        metricsService.registerAstronomy(DATE_FORMAT.format(response.getLastUpdated()), Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
     }
 }
