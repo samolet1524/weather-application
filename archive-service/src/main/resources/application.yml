@@ -13,7 +13,8 @@ spring:
 
 server:
   port: 9097
-
+api:
+  ip-address: changeme
 service:
   weather:
     baseurl: http://weatherservice:9890/weather/service
