@@ -15,6 +15,7 @@ import ru.otus.archiveservice.repository.WeatherPointRepository;
 import ru.otus.model.astronomy.AstronomyResponse;
 import ru.otus.model.weather.RealTimeResponse;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 
 /**
@@ -34,6 +35,8 @@ public class ArchiveService {
     LocationMapper locationMapper;
     CustomMetricsService metricsService;
 
+    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy");
+
 
     /**
      * Saves received weather information to the database.
@@ -46,8 +49,9 @@ public class ArchiveService {
                 .ifPresentOrElse(weatherPoint::setLocation,
                         () -> weatherPoint.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         weatherPointRepository.save(weatherPoint);
-        metricsService.getSummaryTemperature().record(weatherPoint.getTempC());
-        metricsService.getSummaryHumidity().record(weatherPoint.getHumidity());
+        metricsService.registerWeatherValue("temp_c", weatherPoint.getTempC());
+        metricsService.registerWeatherValue("feelslike_c", weatherPoint.getFeelsLikeC());
+        metricsService.registerWeatherValue("humidity", Double.valueOf(weatherPoint.getHumidity()));
     }
 
     /**
@@ -61,6 +65,6 @@ public class ArchiveService {
                 .ifPresentOrElse(astronomy::setLocation,
                         () -> astronomy.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         astronomyRepository.save(astronomy);
-        metricsService.getSummaryDayLength().record(Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
+        metricsService.registerAstronomy(DATE_FORMAT.format(astronomy.getDate()), Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
     }
 }
