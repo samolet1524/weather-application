@@ -30,7 +30,7 @@ public class WeatherService {
     AstronomyResponseMapper astronomyResponseMapper;
     SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    @Cacheable(value = "addresses", key = "#city")
+    @Cacheable(value = "weather", key = "#city")
     public Mono<RealTimeResponse> getCurrentWeatherByCityOrIp(String city) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getCurrentWeather())
@@ -51,6 +51,7 @@ public class WeatherService {
                 .bodyToMono(RealTimeResponse.class);
     }
 
+    @Cacheable(value = "astronomy", key = "{#city, #date}")
     public Mono<AstronomyResponse> getAstronomyByCityOrIp(String city, Date date) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getAstronomy())
@@ -60,19 +61,25 @@ public class WeatherService {
                         .build())
                 .retrieve()
                 .bodyToMono(AstronomyAPIResponse.class)
-                .map(astronomyResponseMapper::toAstronomyResponse).map(astronomyResponse -> {
+                .map(astronomyResponseMapper::toAstronomyResponse)
+                .map(astronomyResponse -> {
                     astronomyResponse.setLastUpdated(date);
                     return astronomyResponse;
                 });
     }
 
-    public Mono<AstronomyResponse> getAstronomy(Double lat, Double lon) {
+    public Mono<AstronomyResponse> getAstronomy(Double lat, Double lon, Date date) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(apiMethodConfig.getAstronomy())
                         .queryParam("key", apiToken.getApiToken())
                         .queryParam("q", lat + "," + lon)
+                        .queryParam("dt", DATE_FORMAT.format(date))
                         .build())
                 .retrieve()
-                .bodyToMono(AstronomyResponse.class);
+                .bodyToMono(AstronomyResponse.class)
+                .map(astronomyResponse -> {
+                    astronomyResponse.setLastUpdated(date);
+                    return astronomyResponse;
+                });
     }
 }

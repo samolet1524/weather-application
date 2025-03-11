@@ -47,7 +47,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("addresses");
+        return new ConcurrentMapCacheManager("weather", "astronomy");
     }
 
     private ExchangeFilterFunction logRequest() {

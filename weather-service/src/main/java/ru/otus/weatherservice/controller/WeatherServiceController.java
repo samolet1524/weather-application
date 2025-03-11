@@ -31,13 +31,15 @@ public class WeatherServiceController {
     }
 
     @GetMapping("astronomy/coordinates")
-    public Mono<AstronomyResponse> getAstronomyByCoordinates(@RequestParam(value = "lat") Double lat, @RequestParam(value = "lon") Double lon) {
-        return weatherService.getAstronomy(lat, lon);
+    public Mono<AstronomyResponse> getAstronomyByCoordinates(@RequestParam(value = "lat") Double lat, @RequestParam(value = "lon") Double lon,
+                                                             @RequestParam(value = "date", required = false, defaultValue = "#{(T(new java.util.Date()))}") @DateTimeFormat(pattern = "dd-MM-yyyy") Date date) {
+        return weatherService.getAstronomy(lat, lon, date);
     }
 
     @GetMapping("astronomy/city")
-    public Mono<AstronomyResponse> getAstronomyByCity(@RequestParam(value = "city") String city) {
-        return weatherService.getAstronomyByCityOrIp(city, new Date());
+    public Mono<AstronomyResponse> getAstronomyByCity(@RequestParam(value = "city") String city,
+                                                      @RequestParam(value = "date", required = false, defaultValue = "#{(T(new java.util.Date()))}") @DateTimeFormat(pattern = "dd-MM-yyyy") Date date) {
+        return weatherService.getAstronomyByCityOrIp(city, date);
     }
 
     @GetMapping("real/{ip}")
