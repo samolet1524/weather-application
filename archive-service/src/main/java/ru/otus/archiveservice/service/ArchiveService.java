@@ -45,9 +45,9 @@ public class ArchiveService {
                 .ifPresentOrElse(weatherPoint::setLocation,
                         () -> weatherPoint.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         weatherPointRepository.save(weatherPoint);
-        metricsService.registerWeatherValueTemperature("temp_c", weatherPoint.getTempC());
-        metricsService.registerWeatherValueTemperature("feelslike_c", weatherPoint.getFeelsLikeC());
-        metricsService.registerWeatherValueHumidity(Double.valueOf(weatherPoint.getHumidity()));
+        metricsService.getTempGauge().set(weatherPoint.getTempC());
+        metricsService.getHumidityGauge().set(weatherPoint.getHumidity());
+        metricsService.getFeelsLikeGauge().set(weatherPoint.getFeelsLikeC());
     }
 
     /**
@@ -61,6 +61,6 @@ public class ArchiveService {
                 .ifPresentOrElse(astronomy::setLocation,
                         () -> astronomy.setLocation(locationRepository.save(locationMapper.toLocation(response.getLocation()))));
         astronomyRepository.save(astronomy);
-        metricsService.registerAstronomy(Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
+        metricsService.getDayLengthGauge().set(Duration.between(astronomy.getSunrise().toLocalTime(), astronomy.getSunset().toLocalTime()).toMinutes());
     }
 }

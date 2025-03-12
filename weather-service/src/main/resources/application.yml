@@ -5,6 +5,10 @@ spring:
 server:
   port: 9890
 
+caching:
+  spring:
+    cacheTTL: 240000
+
 api:
   key: changeme
   base-url: http://api.weatherapi.com/v1
