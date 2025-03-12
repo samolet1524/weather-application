@@ -7,8 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 /**
  * {@code Location} describes the matched location for which the information has been returned.
  */
@@ -43,9 +41,4 @@ public class Location {
      */
     @JsonProperty("tz_id")
     String timezone;
-    /**
-     * Local date and time
-     */
-    LocalDateTime localTime;
-
 }

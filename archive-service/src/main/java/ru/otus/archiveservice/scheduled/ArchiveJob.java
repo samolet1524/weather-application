@@ -4,8 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,11 +12,6 @@ import reactor.core.publisher.Mono;
 import ru.otus.archiveservice.service.ArchiveService;
 import ru.otus.model.astronomy.AstronomyResponse;
 import ru.otus.model.weather.RealTimeResponse;
-
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 /**
  * {@code ArchiveJob} contains periodic tasks
@@ -31,6 +25,7 @@ public class ArchiveJob {
     final ArchiveService archiveService;
     final WebClient webClient;
 
+    @Value("${api.ip-address}")
     private String ipAddress;
 
     /**
@@ -57,8 +52,7 @@ public class ArchiveJob {
      * with a fixed period between the end of the last invocation and the start of the next. Received information
      * will be saved in the database.
      */
-    //    @Scheduled(cron = "0 0 1 * * ?")
-    @Scheduled(cron = "0 03 21  * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void runGetAstronomyPointJob() {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/astronomy/{ip}")
@@ -67,15 +61,5 @@ public class ArchiveJob {
                 .bodyToMono(AstronomyResponse.class)
                 .flatMap(Mono::just)
                 .subscribe(archiveService::addAstronomyPointToArchive);
-    }
-
-    @EventListener
-    private void onApplicationEvent(ContextRefreshedEvent event) {
-        try (final DatagramSocket datagramSocket = new DatagramSocket()) {
-            datagramSocket.connect(InetAddress.getByName("8.8.8.8"), 12345);
-            ipAddress = "212.202.11.111";
-        } catch (UnknownHostException | SocketException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -6,7 +6,7 @@ server:
   port: 8080
 
 service:
-  url: http://localhost:9090/weather/service
+  url: http://weatherservice:9890/weather/service
 
 management:
   endpoint:

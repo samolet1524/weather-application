@@ -1,6 +1,6 @@
 package ru.otus.archiveservice.service;
 
-import io.micrometer.core.instrument.DistributionSummary;
+import com.google.common.util.concurrent.AtomicDouble;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.AccessLevel;
@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * {@code CustomMetricsService} stores custom metrics
@@ -18,24 +20,21 @@ import org.springframework.stereotype.Service;
 public class CustomMetricsService {
 
     final MeterRegistry meterRegistry;
+
     @Getter
-    DistributionSummary summaryTemperature;
+    AtomicDouble tempGauge;
     @Getter
-    DistributionSummary summaryHumidity;
+    AtomicDouble feelsLikeGauge;
     @Getter
-    DistributionSummary summaryDayLength;
+    AtomicDouble humidityGauge;
+    @Getter
+    AtomicLong dayLengthGauge;
 
     @PostConstruct
     public void init() {
-        summaryTemperature = DistributionSummary
-                .builder("temperature")
-                .baseUnit("degree").register(meterRegistry);
-        summaryHumidity = DistributionSummary
-                .builder("humidity")
-                .baseUnit("percent").register(meterRegistry);
-        summaryDayLength = DistributionSummary
-                .builder("day.length")
-                .baseUnit("minutes").register(meterRegistry);
-
+        dayLengthGauge = meterRegistry.gauge("day.length", new AtomicLong(0));
+        tempGauge = meterRegistry.gauge("temperature.point", new AtomicDouble(0));
+        feelsLikeGauge = meterRegistry.gauge("temperature.point.feelsLike", new AtomicDouble(0));
+        humidityGauge = meterRegistry.gauge("humidity.point", new AtomicDouble(0));
     }
 }

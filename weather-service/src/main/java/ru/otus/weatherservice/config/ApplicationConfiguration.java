@@ -7,17 +7,22 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-
 @Configuration
 @EnableScheduling
 @Slf4j
+@EnableCaching
 public class ApplicationConfiguration {
 
     @Bean
@@ -41,6 +46,17 @@ public class ApplicationConfiguration {
                 .build();
     }
 
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager("weather", "astronomy");
+    }
+
+    @CacheEvict(allEntries = true, value = {"weather", "astronomy"})
+    @Scheduled(fixedRateString = "${caching.spring.cacheTTL}")
+    public void reportCacheEvict() {
+        log.info("Cache evict called");
+    }
+
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
             if (log.isDebugEnabled()) {
@@ -49,7 +65,7 @@ public class ApplicationConfiguration {
                 sb.append(clientRequest.method()).append("\n");
                 clientRequest
                         .headers()
-                        .forEach((name, values) -> values.forEach(sb::append));
+                        .forEach((_, values) -> values.forEach(sb::append));
                 log.debug(sb.toString());
             }
             return Mono.just(clientRequest);

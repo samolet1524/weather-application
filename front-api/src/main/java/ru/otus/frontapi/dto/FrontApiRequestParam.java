@@ -23,12 +23,5 @@ public class FrontApiRequestParam implements Serializable {
     @AssertTrue(message = "Either of City or Lat and Lon need to be present")
     public boolean isValid() {
         return (city != null) || (lat != null && lon != null);
-//        if (city == null) {
-//            return lat != null && lon != null;
-//        }
-//        if (lat == null || lon == null) {
-//            return city != null;
-//        }
-//        return true;
     }
 }
